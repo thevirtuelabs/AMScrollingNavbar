@@ -131,6 +131,7 @@ open class ScrollingNavigationController: UINavigationController, UIGestureRecog
     for gesture in scrollableView.gestureRecognizers! {
       if gesture == gestureRecognizer {
         isGestureAdded = true
+        break;
       }
     }
     
