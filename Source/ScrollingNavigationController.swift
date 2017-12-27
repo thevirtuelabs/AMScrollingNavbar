@@ -105,7 +105,7 @@ open class ScrollingNavigationController: UINavigationController, UIGestureRecog
   var previousState: NavigationBarState = .expanded // Used to mark the state before the app goes in background
   
   // James: ===
-  var shouldRemoveGestureRecognizerWhenStopFollowing = true
+  open var shouldRemoveGestureRecognizerWhenStopFollowing = true
   // ===
   
   /**
