@@ -231,6 +231,7 @@ open class ScrollingNavigationController: UINavigationController, UIGestureRecog
     if let gesture = gestureRecognizer {
       // James: ===
       if shouldRemoveGestureRecognizerWhenStopFollowing {
+        // When shouldRemoveGestureRecognizerWhenStopFollowing = false, should not remove gesture. because navbar following will break.
         scrollableView?.removeGestureRecognizer(gesture)
       }
       // ===
