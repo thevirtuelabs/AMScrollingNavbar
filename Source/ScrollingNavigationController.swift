@@ -103,7 +103,11 @@ open class ScrollingNavigationController: UINavigationController, UIGestureRecog
   var scrollSpeedFactor: CGFloat = 1
   var collapseDirectionFactor: CGFloat = 1 // Used to determine the sign of content offset depending of collapse direction
   var previousState: NavigationBarState = .expanded // Used to mark the state before the app goes in background
-
+  
+  // James: ===
+  var shouldRemoveGestureRecognizerWhenStopFollowing = true
+  // ===
+  
   /**
    Start scrolling
 
@@ -121,7 +125,19 @@ open class ScrollingNavigationController: UINavigationController, UIGestureRecog
     gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(ScrollingNavigationController.handlePan(_:)))
     gestureRecognizer?.maximumNumberOfTouches = 1
     gestureRecognizer?.delegate = self
-    scrollableView.addGestureRecognizer(gestureRecognizer!)
+    
+    // James: ===
+    var isGestureAdded = false
+    for gesture in scrollableView.gestureRecognizers! {
+      if gesture == gestureRecognizer {
+        isGestureAdded = true
+      }
+    }
+    
+    if !isGestureAdded {
+      scrollableView.addGestureRecognizer(gestureRecognizer!)
+    }
+    // ===
 
     NotificationCenter.default.addObserver(self, selector: #selector(ScrollingNavigationController.willResignActive(_:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(ScrollingNavigationController.didBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
@@ -213,7 +229,11 @@ open class ScrollingNavigationController: UINavigationController, UIGestureRecog
       showNavbar(animated: true)
     }
     if let gesture = gestureRecognizer {
-      scrollableView?.removeGestureRecognizer(gesture)
+      // James: ===
+      if shouldRemoveGestureRecognizerWhenStopFollowing {
+        scrollableView?.removeGestureRecognizer(gesture)
+      }
+      // ===
     }
     scrollableView = .none
     gestureRecognizer = .none
